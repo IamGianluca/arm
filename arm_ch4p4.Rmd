@@ -1,0 +1,141 @@
+---
+title: "Chapter 4, Problem 4 (Gelman & Hill)"
+author: "Gianluca Rossi"
+date: "3 November 2015"
+output: html_document
+---
+
+*Logarithmic transformations: the folder `pollution` contains mortality rates and various environmental factors from 60 U.S. metropolitan areas (see McDonald and Schwing, 1973). For this exercise we shall model mortality rate given nitric oxides, sulfur dioxide, and hydrocarbons as inputs. This model is an extreme oversimplification as it combines all sources of mortality and does not adjust for crucial factors such as age and smoking. We use it to illustrate log transformations in regression.*
+
+```{r load_libraries, message=FALSE}
+require(foreign)
+require(arm)
+require(ggplot2)
+```
+
+```{r load_dataset, cache=TRUE}
+df <- read.dta("http://www.stat.columbia.edu/~gelman/arm/examples/pollution/pollution.dta")
+
+# scale `mort` (which is defined as "total age-adjusted mortality rate per 100,000")
+df$mort <- df$mort / 100000
+
+summary(df)
+```
+
+
+### Part A
+*Create a scatterplot of mortality rate versus level of nitric oxides. Do you think linear regression will fit these data well? Fit the regression and evaluate a residual plot from the regression.*
+
+```{r}
+plot(df$nox, df$mort)
+```
+
+Linear regression looks like a good start for modeling this problem. The presence of outliers might however complicate our life. It would be advisable to transform the data.
+
+```{r fit_m1}
+m1 <- lm(mort ~ nox, data=df)
+display(m1)
+```
+
+```{r plot_residuals_m1}
+par(mfrow=c(2,2))
+plot(m1)
+```
+
+We will now plot the regression line in order to see how well it fits the training data. 
+
+```{r plot_m1}
+plot(df$nox, df$mort)
+abline(m1)
+```
+
+
+### Part B
+*Find an appropriate transformation that will result in data more appropriate for linear regression. Fit a regression to the transformed data and evaluate the new residual plot.*
+
+```{r fit_m2}
+m2 <- lm(log(mort) ~ log(nox), data=df)
+display(m2)
+```
+
+We can appreaciate how using log transformation significantly improved R-squared in our model. The latter, even though is still pretty low (9%) is a signicantly good result considering we used only one predictor in our model. 
+
+```{r plot_m2}
+ggplot(data=df, aes(x=log(nox), y=log(mort))) + geom_point() + 
+  stat_smooth(method="lm", formula=y ~ x, se=TRUE)
+```
+
+As we can see from the plots below, residuals are now less normally distributed and still suffer from heteroschedasticity. 
+
+```{r plot_residuals_m2}
+par(mfrow=c(2,2))
+plot(m2)
+```
+
+
+### Part C
+*Interpret the slope coefficient from the model you chose in (b).*
+
+* Intercept: The average mortality rate is $exp(-4.71) = 0.0090 = 0.90\%$
+* log(nox): For each 1% difference in nitric oxides, the predicted difference in mortality rate is +0.02%.
+
+
+### Part D
+*Now fit a model predicting mortality rate using levels of nitric oxides, sulfur dioxide, and hydrocarbons as inputs. Use appropriate transformations when helpful. Plot the fitted regression model and interpret the coefficients.*
+
+Before proceding with fitting the model we checked if the predictors need to be scaled. As we can see from the different IQR, this is an advisable transformation, in order to facilitate the interpretation of the results.
+
+```{r study_variables}
+# check IQR for the predictors we will use in our next model
+apply(df[, c("hc", "nox", "so2")], FUN=IQR, MARGIN = 2)
+
+# scale predictors
+scale2 <- function(X) (X - mean(X)) / (2*sd(X))
+df[, c("z.hc", "z.nox", "z.so2")] <- apply(df[, c("hc", "nox", "so2")], FUN=scale2, MARGIN = 2)
+
+apply(df[, c("z.hc", "z.nox", "z.so2")], FUN=IQR, MARGIN = 2)
+```
+
+```{r fit_m3}
+m3 <- lm(log(mort) ~ z.nox + z.so2 + z.hc, data=df)
+display(m3)
+```
+
+```{r plot_residuals_m3}
+par(mfrow=c(2,2))
+plot(m3)
+```
+
+The residuals of this model look quite good. Heteroschedasticity is almost absent and the assuption of normality for the residual is almost perfectly met. 
+Because the outcome variable is log transformed we can interpret the coefficient as:
+
+* Intercept: The mortality rate for an individual exposed to average levels of nitric oxides, sulfur dioxide, and hydrocarbons is $exp(-4.67) = 0.00937 = 0.94\%$
+* z.nox: 1 standard deviation difference for nitric oxides, all rest being average, corresponds to a mortality rate $exp(0.30) = 1.34985$ times higher, which is 35% more
+* z.so2: 1 standard deviation difference for sulfur dioxide corresponds to 0.03% increase in mortality rate
+* z.hc: 1 standard deviation difference in hydrocarbons, all rest being average, corresponds to a mortality rate $exp(-0.32) = 0.726149$ times lower, which is a decrease of 27%
+
+Due to the fact we scaled the predictors we can drive conclusions about which predictor is more important on explaining the variance of the outcome variable. The coefficients of `z.nox` and `z.hc` are much higher than `z.so2`, thus meaning the latter predictor is not that important in our final model.
+
+
+### Part E
+*Cross-validate: fit the model you chose above to the first half of the data and then predict for the second half. (You used all the data to construct the model in (d), so this is not really cross-validation, but it gives a sense of how the steps of cross-validation can be implemented.)*
+
+```{r fit_m4}
+# split dataset into training and test sets
+train <- df[1:(nrow(df)/2), ]
+test <- df[((nrow(df)/2)+1):nrow(df), ]
+
+# fit linear model
+m4 <- lm(log(mort) ~ z.nox + z.so2 + z.hc, data=train)
+display(m4)
+
+# predict
+predictions <- predict(m4, test)
+cbind(predictions=exp(predictions), observed=test$mort)
+
+plot(exp(predictions), test$mort)
+abline(a=0, b=1)
+
+# compute RMSE
+sqrt(mean((test$mort-exp(predictions))^2))
+```

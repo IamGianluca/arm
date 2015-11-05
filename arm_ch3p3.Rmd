@@ -1,0 +1,54 @@
+---
+title: "Chapter 3, Problem 3 (Gelman & Hill)"
+author: "Gianluca Rossi"
+date: "28 October 2015"
+output: html_document
+---
+
+In this exercise you will simulate two variables that are statistically independent of each other to see what happens when we run a regression of one on the other.
+
+a) First generate 1000 data points from a normal distribution with mean 0 and standard deviation 1 by typing `var1 <- rnorm(1000,0,1)` in R. Generate another variable in the same way (call it `var2`). Run a regression of one variable on the other. Is the slope coefficient statistically significant?
+b) Now run a simulation repeating this process 100 times. This can be done using a loop. From each simulation, save the z-score (the estimated coefficient of var1 divided by its standard error). If the absolute value of the z-score exceeds 2, the estimate is statistically significant. Here is code to perform the simulation:
+
+```{r,eval=FALSE}
+z.scores <- rep (NA, 100) 
+for (k in 1:100) {
+  var1 <- rnorm (1000,0,1)
+  var2 <- rnorm (1000,0,1)
+  fit <- lm (var2 ~ var1)
+  z.scores[k] <- coef(fit)[2]/se.coef(fit)[2]
+}
+```
+
+How many of these 100 z-scores are statistically significant?
+
+### Part a
+
+```{r, echo=FALSE, message=FALSE}
+require(arm)
+```
+
+```{r}
+set.seed(1234)
+var1 <- rnorm(1000,0,1)
+var2 <- rnorm(1000,0,1)
+m1 <- lm(var1 ~ var2)
+summary(m1)
+```
+
+The slope is not significant at a 5% significance level. We set a seed in other to have reproduceable results. 
+
+### Part b
+
+```{r}
+z.scores <- rep (NA, 100) 
+for (k in 1:100) {
+  var1 <- rnorm (1000,0,1)
+  var2 <- rnorm (1000,0,1)
+  fit <- lm (var2 ~ var1)
+  z.scores[k] <- coef(fit)[2]/se.coef(fit)[2]
+}
+sum(z.scores > 1.96)
+```
+
+Only on two (out of 100) iterations the z-score is greater than 1.96, thus significant at a 5% significance level. 
