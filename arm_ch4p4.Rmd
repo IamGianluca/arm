@@ -2,7 +2,12 @@
 title: "Chapter 4, Problem 4 (Gelman & Hill)"
 author: "Gianluca Rossi"
 date: "3 November 2015"
-output: html_document
+output:
+  md_document:
+    variant: markdown_github
+  html_document:
+    toc: true
+    theme: united
 ---
 
 *Logarithmic transformations: the folder `pollution` contains mortality rates and various environmental factors from 60 U.S. metropolitan areas (see McDonald and Schwing, 1973). For this exercise we shall model mortality rate given nitric oxides, sulfur dioxide, and hydrocarbons as inputs. This model is an extreme oversimplification as it combines all sources of mortality and does not adjust for crucial factors such as age and smoking. We use it to illustrate log transformations in regression.*
