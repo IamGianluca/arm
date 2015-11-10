@@ -1,6 +1,11 @@
+# Chapter 4, Problem 3 (Gelman & Hill)
+Gianluca Rossi  
+3 November 2015  
+
 Plotting linear and nonlinear regressions: we downloaded data with weight (in pounds) and age (in years) from a random sample of American adults. We first created new variables: age10 = age/10 and age10.sq = (age/10)2, and indicators age18.29, age30.44, age45.64, and age65up for four age categories. We then fit some regressions, with the following results:
 
-``` r
+
+```r
 lm(formula = weight ~ age10) coef.est coef.se (Intercept) 161.0 7.3 age10 2.6 1.6
 n = 2009, k = 2
 residual sd = 119.7, R-Squared = 0.00
@@ -24,15 +29,20 @@ n = 2009, k = residual sd =
 
 *On a graph of weights versus age (that is, weight on y-axis, age on x-axis), draw the fitted regression line from the first model.*
 
-``` r
+
+```r
 require(ggplot2)
 ```
 
-    ## Loading required package: ggplot2
+```
+## Loading required package: ggplot2
+```
 
 ### Part B
 
+
 *On the same graph, draw the fitted regression line from the second model.*
+
 
 ### Part C
 
