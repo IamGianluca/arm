@@ -41,11 +41,11 @@ display(m1)
 ```
 ## lm(formula = log.weights ~ log.heights, data = df)
 ##             coef.est coef.se
-## (Intercept) -4.52     1.65  
-## log.heights  2.25     0.39  
+## (Intercept) -2.84     1.70  
+## log.heights  1.85     0.41  
 ## ---
 ## n = 100, k = 2
-## residual sd = 0.25, R-Squared = 0.25
+## residual sd = 0.26, R-Squared = 0.18
 ```
 
 ```r
