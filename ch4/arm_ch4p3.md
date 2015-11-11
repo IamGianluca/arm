@@ -2,7 +2,7 @@
 Gianluca Rossi  
 3 November 2015  
 
-Plotting linear and nonlinear regressions: we downloaded data with weight (in pounds) and age (in years) from a random sample of American adults. We first created new variables: age10 = age/10 and age10.sq = (age/10)2, and indicators age18.29, age30.44, age45.64, and age65up for four age categories. We then fit some regressions, with the following results:
+Plotting linear and nonlinear regressions: we downloaded data with weight (in pounds) and age (in years) from a random sample of American adults. We first created new variables: age10 = age/10 and age10.sq = (age/10)^2, and indicators age18.29, age30.44, age45.64, and age65up for four age categories. We then fit some regressions, with the following results:
 
 
 ```r
@@ -45,16 +45,39 @@ age65upTRUE       8.5      8.7
 require(ggplot2)
 ```
 
+
+```r
+ggplot(data.frame(x=c(0, 8)), aes(x)) + stat_function(fun=function(x) 161+2.6*x) + labs(x="age (in decades)", y="weight (in pounds)")
 ```
-## Loading required package: ggplot2
-```
+
+![](arm_ch4p3_files/figure-html/unnamed-chunk-2-1.png) 
 
 ### Part B
-
 
 *On the same graph, draw the fitted regression line from the second model.*
 
 
+```r
+ggplot(data.frame(x=c(0, 8)), aes(x)) + 
+    stat_function(fun=function(x) 161 + 2.6*x) +
+    stat_function(fun=function(x) 96.2 + 33.6*x - 3.2*(x)^2, col="blue") + 
+    labs(x="age (in decades)", y="weight (in pounds)")
+```
+
+![](arm_ch4p3_files/figure-html/unnamed-chunk-3-1.png) 
+
 ### Part C
 
 *On another graph with the same axes and scale, draw the fitted regression line from the third model. (It will be discontinuous.)*
+
+
+```r
+ggplot(data.frame(x=c(0, 8)), aes(x)) + 
+    stat_function(fun=function(x) 157.2 + 
+                    19.1*ifelse(3<=x & x<=4.49, 1, 0) + 
+                    27.2*ifelse(4.5<=x & x<=6.49, 1, 0) + 
+                    8.5*ifelse(6.5<=x, 1, 0)) + 
+    labs(x="age (in decades)", y="weight (in pounds)")
+```
+
+![](arm_ch4p3_files/figure-html/unnamed-chunk-4-1.png) 
