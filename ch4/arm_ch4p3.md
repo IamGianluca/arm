@@ -6,23 +6,34 @@ Plotting linear and nonlinear regressions: we downloaded data with weight (in po
 
 
 ```r
-lm(formula = weight ~ age10) coef.est coef.se (Intercept) 161.0 7.3 age10 2.6 1.6
-n = 2009, k = 2
-residual sd = 119.7, R-Squared = 0.00
-lm(formula = weight ~ age10 + age10.sq) coef.est coef.se
-R output
-(Intercept) age10 age10.sq
-n = 2009, k = residual sd =
-96.2 19.3 33.6 8.7 -3.2 0.9 3
-119.3, R-Squared = 0.01
-lm(formula =
-(Intercept) age30.44TRUE age45.64TRUE age65upTRUE
-weight ~ coef.est 157.2 19.1 27.2 8.5
-age30.44 + age45.64 + age65up) coef.se
-5.4 7.0 7.6 8.7
-n = 2009, k = residual sd =
-4
-119.4, R-Squared = 0.01
+lm(formula = weight ~ age10)
+                  coef.est coef.se 
+(Intercept)       161.0     7.3 
+age10             2.6       1.6
+---
+  n = 2009, k = 2
+  residual sd = 119.7, R-Squared = 0.00
+  
+
+lm(formula = weight ~ age10 + age10.sq) 
+                  coef.est coef.se
+(Intercept)       96.2      19.3 
+age10             33.6      8.7 
+age10.sq          -3.2      0.9
+---
+  n = 2009, k = 3, 
+  residual sd = 119.3, R-Squared = 0.01
+
+
+lm(formula = weight ~ age30.44 + age45.64 + age65up)
+                  coef.est coef.se
+(Intercept)       157.2    5.4
+age30.44TRUE      19.1     7.0
+age45.64TRUE      27.2     7.6
+age65upTRUE       8.5      8.7
+---
+  n = 2009, k = 4
+  residual sd = 119.4, R-Squared = 0.01
 ```
 
 ### Part A
