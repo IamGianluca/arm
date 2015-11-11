@@ -2,11 +2,11 @@
 Gianluca Rossi  
 31 October 2015  
 
-Logarithmic transformation and regression: consider the following regression: 
+*Logarithmic transformation and regression: consider the following regression:* 
 
 $$log(\text{weight}) = −3.5 + 2.0 * log(\text{height}) + \text{error,}$$
 
-with errors that have standard deviation 0.25. Weights are in pounds and heights are in inches.
+*with errors that have standard deviation 0.25. Weights are in pounds and heights are in inches.*
 
 ### Part A
 *Fill in the blanks: approximately 68% of the persons will have weights within a factor of `__` and `__` of their predicted values from the regression.*
@@ -41,11 +41,11 @@ display(m1)
 ```
 ## lm(formula = log.weights ~ log.heights, data = df)
 ##             coef.est coef.se
-## (Intercept) -2.84     1.70  
-## log.heights  1.85     0.41  
+## (Intercept) -4.76     1.37  
+## log.heights  2.30     0.33  
 ## ---
 ## n = 100, k = 2
-## residual sd = 0.26, R-Squared = 0.18
+## residual sd = 0.22, R-Squared = 0.33
 ```
 
 ```r

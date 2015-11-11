@@ -2,7 +2,7 @@
 Gianluca Rossi  
 1 November 2015  
 
-The folder `earnings` has data from the Work, Family, and Well-Being Survey (Ross, 1990). Pull out the data on earnings, sex, height, and weight.
+*The folder `earnings` has data from the Work, Family, and Well-Being Survey (Ross, 1990). Pull out the data on earnings, sex, height, and weight.*
 
 ### Part A
 *In R, check the dataset and clean any unusually coded data.*
