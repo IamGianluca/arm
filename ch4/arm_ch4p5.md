@@ -19,4 +19,6 @@ Gianluca Rossi
 
 *Propose an idiosyncratic transformation (as in the example on page 65) and discuss the advantages and disadvantages of using it as a regression input.*
 
-The transformation we propose is to take the 
+The transformation we propose is to discretise the difference between $D_{i}$ and $R_{i}$ into three ranges $[-\infty, -5M), [-5M, +5M] \text{ and } (+5M, +\infty]$. These ranges will then be mapped to the values -1, 0 and +1. Another option, which could be interesting to explore if counties have widely different size, thus odds of collecting large sums of money, is to consider the percentage of difference between the two values. In this case, we will discretise the ratio $\frac{D_{i} - R_{i}}{D_{i}}$into three ranges $[-\infty, -10\%), [-10\%, +10\%] \text{ and } (+10\%, +\infty]$. These ranges will then be mapped to the values -1, 0 and +1. 
+
+The decision of which transformation makes more sense depends on the data at hand. The suggested transformations could be sentible when the data shows particular cut points. For instance, we would use such transformation when the data shows that when founds raised by the two parties differ by more than 10%, the party who raised more money is highly likely to have a large share of votes; whereas when the difference is smaller, there is high uncertainty over the final outcome.
