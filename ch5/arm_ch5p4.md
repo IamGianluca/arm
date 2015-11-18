@@ -504,6 +504,17 @@ display(m5)
 
 Removing `workclass` from our final model specification slightly reduced the residual difference but made for a more interpretable model. The main reason why we opted for removing that variable is that more of the levels were not statistically significant and had extremely high standard errrors. We found this last formuation much more robust.
 
+Our final model coefficients can be explained as follows:
+
+* `Intercept`: the probability of a female individual of average age and education, employed as ???? and average capital gain is $logit^{-1}(-2.41) = 0.0824 = 8.24\%$
+* `sex`: this is the coefficient for sex (on the logit scale) is any other predictor is at its average value (or level 0 if a factor). To quickly interpret this on the probability scale, we divide by 4: $\frac{1.22}{4} = 0.305 = 30.50\%$. Thus, at the mean level of any other predictor in the data, a male individual has an approximate 30% increase in probability of earning more than $50K/yr
+* `c.age`: to quickly interpret the coefficient in the probability scale, we divide by 4: $\frac{1.63}{4} = 0.4075 = 40.75%$. Thus, at the mean level of any other predictor (or level 0 if a factor), each standard deviation increase in c.age, which roughtly corresponds to ???, there is a 40.75% increase in probability to earn more than $50K/yr. We should however notice how it's not realistic to speak about holding every other predictor to its mean, because `c.age` and `c.age^2` will necessary be linked
+* `c.age^2`: this transformation has made necessary to capture the trends at the more extreme part of the age distribution tales. To quickly interpret this coefficient in the probability scale, we divive by 4: $\frac{-2.39}{4} = -0.5975 = -59.75\%$. Holding at their average every other predictor, each additional standard deviation increase in `c.age^2` corresponds to an approximate 59.75% decrease in probability to earn more than $50K/yr. We should however notice how it's not realistic to speak about holding every other predictor to its mean, because `c.age` and `c.age^2` will necessary be linked
+* `c.education_num`: this is the coefficient for education (in the logit scale) if any other predictor is hold at its average. To quickly interpret this on the probability scale, we divide it by 4: $\frac{1.30}{4} = 0.325 = 32.50\%$. Thus, at the mean level of any other predictor, each standard deviation increase in `c.education` corresponds to an approximate 32.50% increase in probability to earn more than $50K/yr
+* `occupation`: the base level for occupation is "unknown". Each coefficient, divided by 4, will approximately corresponds to the difference in probability to earn more than $50K/yr for that specific category 
+* `c.capital`: holding any other predictor at its average, a standard deviation increase in capital gains corresponds to a $\frac{1.24}{4} = 0.31 = 31%$ increase in probability to earn more than $50K/yr
+* `sex:c.age`: if the individual is a male, this corresponds to an increase by 0.67 to the coefficient for age
+
 
 ```r
 cost <- function(r, pi = 0) mean(abs(r-pi) > 0.5)
@@ -514,7 +525,7 @@ cv$delta[2]
 ```
 
 ```
-## [1] 0.1738658
+## [1] 0.173477
 ```
 
 Using cross-validation we know that on around 17.38% of the case we predict the wrong response outcome. This is not a bad score considering the amount of time we spent on this exercise and the fact we are using a generalized linear model. Non linear models might be better suited for this kind of classification problem. 
@@ -568,7 +579,7 @@ table(glm.pred, test$earnings)
 ```
 
 ```r
-# error rate
+# prediction error
 1 - mean(glm.pred == test$earnings)
 ```
 
@@ -576,4 +587,4 @@ table(glm.pred, test$earnings)
 ## [1] 0.1792273
 ```
 
-Cross-validated error rate and the error rate we got making predictions on new data are very closed. This is very good because it means that our cross-validation procedure is reliable and we can use it to build our model and optimise some parameters.
+Cross-validated prediction error and the prediction error we got making predictions on new data are extremely close. This is very promising because it means that our cross-validation procedure is reliable and can be used to test our models and tune some parameters.
