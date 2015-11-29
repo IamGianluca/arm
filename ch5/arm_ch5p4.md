@@ -507,7 +507,7 @@ Removing `workclass` from our final model specification slightly reduced the res
 Our final model coefficients can be explained as follows:
 
 * `Intercept`: the probability of a female individual of average age and education, employed as ???? and average capital gain is $logit^{-1}(-2.41) = 0.0824 = 8.24\%$
-* `sex`: this is the coefficient for sex (on the logit scale) is any other predictor is at its average value (or level 0 if a factor). To quickly interpret this on the probability scale, we divide by 4: $\frac{1.22}{4} = 0.305 = 30.50\%$. Thus, at the mean level of any other predictor in the data, a male individual has an approximate 30% increase in probability of earning more than $50K/yr
+* `sex`: this is the coefficient for sex (on the logit scale) if any other predictor is at its average value (or level 0 if a factor). To quickly interpret this on the probability scale, we divide by 4: $\frac{1.22}{4} = 0.305 = 30.50\%$. Thus, at the mean level of any other predictor in the data, a male individual has an approximate 30% increase in probability of earning more than $50K/yr
 * `c.age`: to quickly interpret the coefficient in the probability scale, we divide by 4: $\frac{1.63}{4} = 0.4075 = 40.75%$. Thus, at the mean level of any other predictor (or level 0 if a factor), each standard deviation increase in c.age, which roughtly corresponds to ???, there is a 40.75% increase in probability to earn more than $50K/yr. We should however notice how it's not realistic to speak about holding every other predictor to its mean, because `c.age` and `c.age^2` will necessary be linked
 * `c.age^2`: this transformation has made necessary to capture the trends at the more extreme part of the age distribution tales. To quickly interpret this coefficient in the probability scale, we divive by 4: $\frac{-2.39}{4} = -0.5975 = -59.75\%$. Holding at their average every other predictor, each additional standard deviation increase in `c.age^2` corresponds to an approximate 59.75% decrease in probability to earn more than $50K/yr. We should however notice how it's not realistic to speak about holding every other predictor to its mean, because `c.age` and `c.age^2` will necessary be linked
 * `c.education_num`: this is the coefficient for education (in the logit scale) if any other predictor is hold at its average. To quickly interpret this on the probability scale, we divide it by 4: $\frac{1.30}{4} = 0.325 = 32.50\%$. Thus, at the mean level of any other predictor, each standard deviation increase in `c.education` corresponds to an approximate 32.50% increase in probability to earn more than $50K/yr
@@ -525,7 +525,7 @@ cv$delta[2]
 ```
 
 ```
-## [1] 0.173477
+## [1] 0.1738658
 ```
 
 Using cross-validation we know that on around 17.38% of the case we predict the wrong response outcome. This is not a bad score considering the amount of time we spent on this exercise and the fact we are using a generalized linear model. Non linear models might be better suited for this kind of classification problem. 
