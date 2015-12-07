@@ -71,7 +71,7 @@ mean(df$log.arsenic)
 ## [1] 0.3138608
 ```
 
-* `dist:log.arsenic`: 
+* `dist:log.arsenic`: the coefficient for the interaction term is zero and also not significant (p-value 0.206). We might want to exclude it the next time we fit the model 
 
 
 ### Part B
@@ -79,11 +79,98 @@ mean(df$log.arsenic)
 *Make graphs as in Figure 5.12 to show the relation between probability of switching, distance, and arsenic level.*
 
 
+```r
+ggplot(data=df, aes(x=dist, y=switch)) +
+  geom_jitter(position=position_jitter(height=.05)) + 
+  geom_smooth(method="glm", family="binomial")
+```
+
+![](arm_ch5_p10_files/figure-html/plot_relationship-1.png) 
+
+```r
+ggplot(data=df, aes(x=log.arsenic, y=switch)) +
+  geom_jitter(position=position_jitter(height=.05)) + 
+  geom_smooth(method="glm", family="binomial")
+```
+
+![](arm_ch5_p10_files/figure-html/plot_relationship-2.png) 
+
 ### Part C
 
 *Following the procedure described in Section 5.7, compute the average pre- dictive differences corresponding to:*
 
 i. *A comparison of dist = 0 to dist = 100, with arsenic held constant.*
+
+
+```r
+b <- coef(m1)
+hi <- 100
+lo <- 0
+delta <- invlogit(b[1] + b[2]*hi + b[3]*df$log.arsenic +
+                    b[4]*df$log.arsenic*hi) - 
+  invlogit(b[1] + b[2]*lo + b[3]*df$log.arsenic + b[4]*df$log.arsenic*lo)
+print(mean(delta))
+```
+
+```
+## [1] -0.2113356
+```
+
+The result is -0.21, implying that, on average in the data, households that are 100 meters from the nearest safe well are 21% less likely to switch, compared to households that are right next to the nearest safe well, as the same arsenic and education levels.
+
 ii. *A comparison of dist = 100 to dist = 200, with arsenic held constant.*
+
+
+```r
+b <- coef(m1)
+hi <- 200
+lo <- 100
+delta <- invlogit(b[1] + b[2]*hi + b[3]*df$log.arsenic +
+                    b[4]*df$log.arsenic*hi) - 
+  invlogit(b[1] + b[2]*lo + b[3]*df$log.arsenic + b[4]*df$log.arsenic*lo)
+print(mean(delta))
+```
+
+```
+## [1] -0.2090207
+```
+
+We obtain pretty much the same results, meaning that the cost function of additional 100 meters distance from the nearest safe well drives the same amount of perceived cost than from 0 to 100 meters.
+
 iii. *A comparison of arsenic = 0.5 to arsenic = 1.0, with dist held constant.* 
+
+
+```r
+b <- coef(m1)
+hi <- 1.0
+lo <- 0.5
+delta <- invlogit(b[1] + b[2]*df$dist + b[3]*hi +
+                    b[4]*df$dist*hi) - 
+  invlogit(b[1] + b[2]*df$dist + b[3]*lo + b[4]*df$dist*lo)
+print(mean(delta))
+```
+
+```
+## [1] 0.09195206
+```
+
+The result is 0.09, so this comparison corresponds to a 9% difference in probability of switching.
+
 iv. *A comparison of arsenic = 1.0 to arsenic = 2.0, with dist held constant. Discuss these results.*
+
+
+```r
+b <- coef(m1)
+hi <- 2.0
+lo <- 1.0
+delta <- invlogit(b[1] + b[2]*df$dist + b[3]*hi +
+                    b[4]*df$dist*hi) - 
+  invlogit(b[1] + b[2]*df$dist + b[3]*lo + b[4]*df$dist*lo)
+print(mean(delta))
+```
+
+```
+## [1] 0.1353431
+```
+
+The result is 0.14, so this comparison corresponds to a 14% difference in probability of switching.
