@@ -7,25 +7,7 @@ Gianluca Rossi
 
 ```r
 require(ggplot2)
-```
-
-```
-## Loading required package: ggplot2
-```
-
-```r
 require(arm)
-```
-
-```
-## Loading required package: arm
-## Loading required package: MASS
-## Loading required package: Matrix
-## Loading required package: lme4
-## 
-## arm (Version 1.8-6, built: 2015-7-7)
-## 
-## Working directory is /Users/grossi/Dropbox/Code/ARM/ch5
 ```
 
 
