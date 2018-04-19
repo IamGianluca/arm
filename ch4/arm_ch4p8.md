@@ -493,7 +493,7 @@ In our final model we will include four predictors: `female`, `onecredit`, 'prof
 
 ```r
 # scale and centre `profevaluation`; this is needed to make the coefficents between binary variables and continuous variables comparable. Another main advantage of this transformation is that it will make the intercept meaningful
-df$profevaluation <- df$profevaluation - mean(df$profevaluation) / (2 * sd(df$profevaluation))
+df$profevaluation <- (df$profevaluation - mean(df$profevaluation)) / (2 * sd(df$profevaluation))
 
 m3 <- lm(courseevaluation ~ female + onecredit + profevaluation*nonenglish, data=df)
 display(m3)
